@@ -19,6 +19,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 5,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,
@@ -48,6 +49,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 5,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,
@@ -77,6 +79,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 4,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,
@@ -107,6 +110,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 8,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,
@@ -137,6 +141,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 4,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,
@@ -167,6 +172,7 @@ const products = [
     createdAt: "2021-04-23T09:12:24.2424+02",
     updatedAt: "2021-04-23T09:12:24.2424+02",
     unitsInStock: 8,
+    quantity: 0,
     votes: {
       upVotes: {
         upperLimit: 10,

@@ -56,15 +56,15 @@ function ItemCard({
         <div className="ItemCard__icons">
           <div className="ItemCard__icon-row">
             <IconButton aria-label="up vote product" handleClick={onUpVote}>
-              <ThumbDown />
-            </IconButton>
-            <p className="ItemCard__icon-txt">{downVotes.currentValue}</p>
-          </div>
-          <div className="ItemCard__icon-row">
-            <IconButton aria-label="down vote product" handleClick={onDownVote}>
               <ThumbUp />
             </IconButton>
             <p className="ItemCard__icon-txt">{upVotes.currentValue}</p>
+          </div>
+          <div className="ItemCard__icon-row">
+            <IconButton aria-label="down vote product" handleClick={onDownVote}>
+              <ThumbDown />
+            </IconButton>
+            <p className="ItemCard__icon-txt">{downVotes.currentValue}</p>
           </div>
         </div>
         <div className="ItemCard__icon-row">
