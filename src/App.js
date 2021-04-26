@@ -233,12 +233,12 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
+        handleDownVote={this.handleDownVote}
+        handleUpVote={this.handleUpVote}
+        handleSetFavorite={this.handleSetFavorite}
+        handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
+        handleChange={this.handleChange}
       />
     );
   }
