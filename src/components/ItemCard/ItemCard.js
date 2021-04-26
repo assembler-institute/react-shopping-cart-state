@@ -11,6 +11,21 @@ function Divider() {
   return <hr className="ItemCard__divider" />;
 }
 
+function getPopularityClasses(
+  currentValue,
+  limit,
+  prevClasses,
+  popularityClassName,
+) {
+  const halfLimit = Math.floor(limit / 2);
+
+  if (currentValue >= halfLimit) {
+    return `${prevClasses} ${popularityClassName}`;
+  }
+
+  return prevClasses;
+}
+
 function ItemCard({
   id,
   img,
@@ -58,13 +73,31 @@ function ItemCard({
             <IconButton aria-label="up vote product" handleClick={onUpVote}>
               <ThumbUp />
             </IconButton>
-            <p className="ItemCard__icon-txt">{upVotes.currentValue}</p>
+            <p
+              className={getPopularityClasses(
+                upVotes.currentValue,
+                upVotes.upperLimit,
+                "ItemCard__icon-txt",
+                "ItemCard__icon-popular",
+              )}
+            >
+              {upVotes.currentValue}
+            </p>
           </div>
           <div className="ItemCard__icon-row">
             <IconButton aria-label="down vote product" handleClick={onDownVote}>
               <ThumbDown />
             </IconButton>
-            <p className="ItemCard__icon-txt">{downVotes.currentValue}</p>
+            <p
+              className={getPopularityClasses(
+                downVotes.currentValue,
+                downVotes.lowerLimit,
+                "ItemCard__icon-txt",
+                "ItemCard__icon-unpopular",
+              )}
+            >
+              {downVotes.currentValue}
+            </p>
           </div>
         </div>
         <div className="ItemCard__icon-row">
