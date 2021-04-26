@@ -1,9 +1,9 @@
 {
-  "name": "react-shopping-cart-project",
+  "name": "react-shopping-cart-state",
   "version": "1.0.0",
-  "description": "Assembler School: React Shopping Cart Project",
+  "description": "Assembler School: React Shopping Cart State",
   "keywords": [
-    "react-shopping-cart-project",
+    "react-shopping-cart-state",
     "assembler school"
   ],
   "private": true,
@@ -53,9 +53,7 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^4.1.1",
-    "husky": "^6.0.0",
     "jest": "^26.6.0",
-    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "typescript": "^4.2.4"
   },
@@ -70,10 +68,7 @@
     "lint:js": "eslint . --ext .js",
     "lint:js:fix": "npm run lint:js -- --fix",
     "lint:format": "prettier --write .",
-    "lint:format:check": "prettier --check .",
-    "prepare": "husky install",
-    "pre:commit": "lint-staged",
-    "pre:push": "npm run lint:js && npm run lint:format:check && npm run test:ci:all"
+    "lint:format:check": "prettier --check ."
   },
   "browserslist": {
     "production": [
@@ -89,6 +84,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/assembler-school/react-shopping-cart-project.git"
+    "url": "https://github.com/assembler-school/react-shopping-cart-state.git"
   }
 }
