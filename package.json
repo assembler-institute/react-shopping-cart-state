@@ -1,9 +1,9 @@
 {
-  "name": "react-shopping-cart-project",
+  "name": "react-shopping-cart-state",
   "version": "1.0.0",
-  "description": "Assembler School: React Shopping Cart Project",
+  "description": "Assembler School: React Shopping Cart State",
   "keywords": [
-    "react-shopping-cart-project",
+    "react-shopping-cart-state",
     "assembler school"
   ],
   "private": true,
@@ -89,6 +89,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/assembler-school/react-shopping-cart-project.git"
+    "url": "https://github.com/assembler-school/react-shopping-cart-state.git"
   }
 }
