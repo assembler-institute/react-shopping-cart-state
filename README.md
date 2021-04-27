@@ -283,7 +283,7 @@ It searches if the `state.cartItems` has a product with the `productId`
 
 @TODO
 
-### 4. Remove products to the cart
+### 4. Remove cart items
 
 #### File
 
@@ -291,23 +291,11 @@ It searches if the `state.cartItems` has a product with the `productId`
 /src/App.js
 ```
 
-In this step you will have to be able to add elements to the cart:
+In this step you will have to be able to remove elements from the cart:
 
 For this, you will need to complete the code of the `handleRemove(productId) {}`
-method in the `App` component so that:
-
-It removes the `cartItem` that has the `productId` from the `state.cartItems`
-property.
-
-1.  if it finds it, it will have to increment the quantity of the item without
-    adding a new element to the cart, just increment the quantity of the
-    existing one
-
-### Extra steps 💯
-
-1. Check if the `item.quantity >= item.unitsInStock` so that users cannot add
-   items to the cart if the current `quantity` is greater or equal to the
-   `unitsInStock`
+method in the `App` component so that it removes the `cartItem` that has the
+`productId` that the method receives.
 
 #### Test suite name
 
