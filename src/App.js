@@ -32,6 +32,7 @@ class App extends Component {
       loadingError: null,
     };
     this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +82,19 @@ class App extends Component {
 
   // handleChange(event, productId) {}
 
-  // handleRemove(productId) {}
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const itemToRemove = cartItems.find((item) => item.id === productId);
+    const indextToRemove = cartItems.indexOf(itemToRemove);
+
+    cartItems.splice(indextToRemove, 1);
+    // eslint-disable-next-line no-console
+    console.log(itemToRemove);
+
+    this.setState({
+      cartItems: cartItems,
+    });
+  }
 
   // handleDownVote(productId) {}
 
@@ -109,7 +122,7 @@ class App extends Component {
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
         handleAddToCart={this.handleAddToCart}
-        handleRemove={() => {}}
+        handleRemove={this.handleRemove}
         handleChange={() => {}}
       />
     );
