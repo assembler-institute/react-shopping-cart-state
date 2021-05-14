@@ -1,9 +1,25 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
 
 import Home from "./pages/Home";
 
 import * as api from "./api";
 
+function newCartItem(item) {
+  if (item.quantity >= item.unitsInStock) {
+    return item;
+  }
+  return {
+    id: item.id,
+    title: item.title,
+    img: item.img,
+    price: item.price,
+    unitsInStock: item.unitsInStock,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    quantity: item.quantity + 1,
+  };
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +31,7 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+    this.handleAddToCart = this.handleAddToCart.bind(this);
   }
 
   componentDidMount() {
@@ -30,7 +47,37 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { products, cartItems } = this.state;
+    const product = products.find((element) => element.id === productId);
+    const itemInCart = cartItems.find((item) => item.id === productId);
+
+    if (itemInCart) {
+      // eslint-disable-next-line no-console
+      const updatedItems = cartItems.map((item) => {
+        if (item.id !== productId) {
+          return item;
+        }
+
+        if (item.quantity >= item.unitsInStock) {
+          return item;
+        }
+
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      });
+
+      this.setState({ cartItems: updatedItems });
+      return;
+    }
+
+    const updatedItem = newCartItem(product);
+    this.setState((prevState) => ({
+      cartItems: [...prevState.cartItems, updatedItem],
+    }));
+  }
 
   // handleChange(event, productId) {}
 
@@ -61,7 +108,7 @@ class App extends Component {
         handleDownVote={() => {}}
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
+        handleAddToCart={this.handleAddToCart}
         handleRemove={() => {}}
         handleChange={() => {}}
       />
