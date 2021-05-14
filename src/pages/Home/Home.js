@@ -11,7 +11,7 @@ function Home({
   cartItems,
   isLoading,
   hasError,
-  // loadingError,
+  loadingError,
   handleDownVote,
   handleUpVote,
   handleSetFavorite,
@@ -37,7 +37,14 @@ function Home({
                 </header>
               </div>
               {/* {isLoading Loading products...} */}
+              <h2>{isLoading ? "Loading..." : null}</h2>
               {/* {hasError ...} */}
+              {hasError && (
+                <pre>
+                  <code>{loadingError}</code>
+                </pre>
+              )}
+
               {!isLoading && !hasError && (
                 <div className="col col-12">
                   <ProductsListing
