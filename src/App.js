@@ -30,7 +30,7 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {}
 
   // handleChange(event, productId) {}
 
