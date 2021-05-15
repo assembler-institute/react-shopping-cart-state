@@ -41,12 +41,26 @@ class App extends Component {
       isLoading: true,
     });
 
-    api.getProducts().then((data) => {
+    const lsData = JSON.parse(localStorage.getItem("state-data"));
+    if (lsData) {
       this.setState({
-        products: data,
+        products: lsData.products,
+        cartItems: lsData.cartItems,
         isLoading: false,
       });
-    });
+    } else {
+      api.getProducts().then((data) => {
+        this.setState({
+          products: data,
+          isLoading: false,
+        });
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    const { products, cartItems } = this.state;
+    localStorage.setItem("state-data", JSON.stringify({ products, cartItems }));
   }
 
   handleAddToCart(productId) {
@@ -108,7 +122,6 @@ class App extends Component {
 
   handleUpVote(productId) {
     const { products } = this.state;
-
     const updatedArr = products.map((pr) => {
       if (pr.id === productId) {
         const prMod =
@@ -134,7 +147,6 @@ class App extends Component {
 
   handleSetFavorite(productId) {
     const { products } = this.state;
-
     const updatedArr = products.map((product) => {
       if (product.id === productId) {
         return { ...product, isFavorite: !product.isFavorite };
