@@ -5,17 +5,21 @@ import "./ShoppingCartItem.scss";
 import Button from "../Button";
 
 function ShoppingCartItem({
-  // id,
+  id,
   img,
   title,
   price,
   quantity,
   // unitsInStock,
-  // handleChange,
-  // handleRemove,
+  handleChange,
+  handleRemove,
 }) {
-  function onHandleChange() {}
-  function onHandleRemove() {}
+  function onHandleChange() {
+    handleChange(quantity, id, price);
+  }
+  function onHandleRemove() {
+    handleRemove(id);
+  }
 
   return (
     <div className="col">
@@ -44,7 +48,7 @@ function ShoppingCartItem({
                         className="custom-select"
                         onChange={onHandleChange}
                         onBlur={onHandleChange}
-                        value={quantity}
+                        /* value={quantity} */
                       >
                         {/* {buildSelectOptions(unitsInStock)} */}
                         <option value="1,">1</option>

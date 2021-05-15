@@ -15,6 +15,9 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleUpVote = this.handleUpVote.bind(this);
   }
 
   componentDidMount() {
@@ -30,15 +33,63 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { cartItems } = this.state;
+    const { products } = this.state;
+    const { quantity } = this.state;
+    let counter = 0;
 
-  // handleChange(event, productId) {}
+    products.forEach((prod) => {
+      if (prod.id === productId) {
+        cartItems.forEach((cItem) => {
+          if (cItem.id === productId) {
+            this.setState({
+              quantity: quantity + 1,
+            });
+          } else {
+            counter += 1;
+          }
+        });
+        if (cartItems.length === counter) {
+          prod.quantity += 1;
+          console.log(prod.quantity);
+          cartItems.push(prod);
+          this.setState({
+            cartItems: cartItems,
+          });
+        }
+      }
+    });
+    console.log(quantity);
+  }
 
-  // handleRemove(productId) {}
+  handleChange(quantity, productId, price) {
+    const { cartItems } = this.state;
+    console.log(price);
+    console.log(quantity);
+    console.log(productId);
+    console.log(cartItems);
+  }
+
+  handleRemove(productId) {
+    let { cartItems } = this.state;
+
+    const toRemove = cartItems.filter((item) => item.id !== productId);
+
+    cartItems = toRemove;
+    this.setState({
+      cartItems: cartItems,
+    });
+  }
 
   // handleDownVote(productId) {}
 
-  // handleUpVote(productId) {}
+  handleUpVote(productId) {
+    const { cartItems } = this.state;
+    console.log(cartItems);
+    console.log(productId);
+    console.log(this);
+  }
 
   // handleSetFavorite(productId) {}
 
@@ -59,11 +110,17 @@ class App extends Component {
         hasError={hasError}
         loadingError={loadingError}
         handleDownVote={() => {}}
-        handleUpVote={() => {}}
+        handleUpVote={this.handleUpVote}
         handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
+        handleAddToCart={(prop) => {
+          this.handleAddToCart(prop);
+        }}
+        handleRemove={(prop) => {
+          this.handleRemove(prop);
+        }}
+        handleChange={(prop) => {
+          this.handleChange(prop);
+        }}
       />
     );
   }
