@@ -44,17 +44,23 @@ class App extends Component {
       if (prod.id === productId) {
         cartItems.forEach((cItem) => {
           if (cItem.id === productId) {
-            if (cItem.quantity !== 10) {
+            /* if (cItem.quantity !== 10) {
               cItem.quantity += 1;
             } else {
               cItem.quantity = 10;
-            }
+            } */
+            cItem.quantity += 1;
+            // eslint-disable-next-line
+            cItem.subtotal = cItem.price * cItem.quantity;
+            // eslint-disable-next-line
+            console.log(cItem);
           } else {
             counter += 1;
           }
         });
         if (cartItems.length === counter) {
           prod.quantity = 1;
+          prod.subtotal = prod.price;
           cartItems.push(prod);
         }
       }
