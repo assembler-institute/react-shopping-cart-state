@@ -34,6 +34,7 @@ class App extends Component {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSetFavorite = this.handleSetFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -103,7 +104,7 @@ class App extends Component {
 
     cartItems.splice(indextToRemove, 1);
     // eslint-disable-next-line no-console
-    console.log(itemToRemove);
+    // console.log(itemToRemove);
 
     this.setState({
       cartItems: cartItems,
@@ -114,7 +115,21 @@ class App extends Component {
 
   // handleUpVote(productId) {}
 
-  // handleSetFavorite(productId) {}
+  handleSetFavorite(productId) {
+    const { products } = this.state;
+    const updatedFavorites = products.map((item) => {
+      if (item.id === productId) {
+        return {
+          ...item,
+          isFavorite: !item.isFavorite,
+        };
+      }
+
+      return item;
+    });
+
+    this.setState({ products: updatedFavorites });
+  }
 
   render() {
     const {
@@ -134,7 +149,7 @@ class App extends Component {
         loadingError={loadingError}
         handleDownVote={() => {}}
         handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
+        handleSetFavorite={this.handleSetFavorite}
         handleAddToCart={this.handleAddToCart}
         handleRemove={this.handleRemove}
         handleChange={this.handleChange}
