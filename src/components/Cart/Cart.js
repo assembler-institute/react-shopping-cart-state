@@ -5,9 +5,7 @@ import Button from "../Button";
 
 function getCartTotal(cart) {
   // eslint-disable-next-line no-shadow
-  const pricesArray = cart.map((item) => item.price);
-  // eslint-disable-next-line no-console
-  console.log(pricesArray);
+  const pricesArray = cart.map((item) => item.price * item.quantity);
   return pricesArray.reduce((accum, item) => accum + item, 0);
 }
 
@@ -46,7 +44,6 @@ function Cart({ cartItems, handleRemove, handleChange, ...props }) {
                 <h4 className="h5">Total</h4>
                 <h4>
                   <strong>{getCartTotal(cartItems)}€</strong>
-                  {/* <strong>0€</strong> */}
                 </h4>
               </div>
               <hr />

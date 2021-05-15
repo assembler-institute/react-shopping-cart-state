@@ -33,6 +33,7 @@ class App extends Component {
     };
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -54,7 +55,6 @@ class App extends Component {
     const itemInCart = cartItems.find((item) => item.id === productId);
 
     if (itemInCart) {
-      // eslint-disable-next-line no-console
       const updatedItems = cartItems.map((item) => {
         if (item.id !== productId) {
           return item;
@@ -80,7 +80,19 @@ class App extends Component {
     }));
   }
 
-  // handleChange(event, productId) {}
+  handleChange(event, productId) {
+    const { cartItems } = this.state;
+    const updatedItems = cartItems.map((item) => {
+      if (item.id === productId && item.quantity <= item.unitsInStock) {
+        // eslint-disable-next-line no-console
+        console.log(Number(event.target.value));
+      }
+
+      return item;
+    });
+
+    this.setState({ cartItems: updatedItems });
+  }
 
   handleRemove(productId) {
     const { cartItems } = this.state;
@@ -123,7 +135,7 @@ class App extends Component {
         handleSetFavorite={() => {}}
         handleAddToCart={this.handleAddToCart}
         handleRemove={this.handleRemove}
-        handleChange={() => {}}
+        handleChange={this.handleChange}
       />
     );
   }
