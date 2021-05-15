@@ -20,6 +20,9 @@ class App extends Component {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleUpVote = this.handleUpVote.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleDownVote = this.handleDownVote.bind(this);
+    this.handleSetFavorite = this.handleSetFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -44,16 +47,15 @@ class App extends Component {
       if (prod.id === productId) {
         cartItems.forEach((cItem) => {
           if (cItem.id === productId) {
+            // Limit quantity to 10 -->
             /* if (cItem.quantity !== 10) {
               cItem.quantity += 1;
             } else {
               cItem.quantity = 10;
             } */
+
             cItem.quantity += 1;
-            // eslint-disable-next-line
             cItem.subtotal = cItem.price * cItem.quantity;
-            // eslint-disable-next-line
-            console.log(cItem);
           } else {
             counter += 1;
           }
@@ -70,12 +72,18 @@ class App extends Component {
     });
   }
 
-  handleChange(quantity, productId, price) {
+  handleChange(event, productId) {
     const { cartItems } = this.state;
-    console.log(price);
-    console.log(quantity);
-    console.log(productId);
-    console.log(cartItems);
+
+    const toCount = cartItems.find((product) => product.id === productId);
+
+    toCount.quantity = parseInt(event.target.value, 10);
+
+    toCount.subtotal = toCount.price * toCount.quantity;
+
+    this.setState({
+      cartItems: cartItems,
+    });
   }
 
   handleRemove(productId) {
@@ -89,16 +97,42 @@ class App extends Component {
     });
   }
 
-  // handleDownVote(productId) {}
+  handleDownVote(productId) {
+    const { products } = this.state;
+    const downVoted = products.find((product) => product.id === productId);
 
-  handleUpVote(productId) {
-    const { cartItems } = this.state;
-    console.log(cartItems);
-    console.log(productId);
-    console.log(this);
+    downVoted.votes.downVotes.currentValue += 1;
+
+    this.setState({
+      products: products,
+    });
   }
 
-  // handleSetFavorite(productId) {}
+  handleUpVote(productId) {
+    const { products } = this.state;
+    const upVoted = products.find((product) => product.id === productId);
+
+    upVoted.votes.upVotes.currentValue += 1;
+
+    this.setState({
+      products: products,
+    });
+  }
+
+  handleSetFavorite(productId) {
+    const { products } = this.state;
+    const favorited = products.find((product) => product.id === productId);
+
+    if (favorited.isFavorite) {
+      favorited.isFavorite = false;
+    } else {
+      favorited.isFavorite = true;
+    }
+
+    this.setState({
+      products: products,
+    });
+  }
 
   render() {
     const {
@@ -116,17 +150,23 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={this.handleUpVote}
-        handleSetFavorite={() => {}}
+        handleDownVote={(prop) => {
+          this.handleDownVote(prop);
+        }}
+        handleUpVote={(prop) => {
+          this.handleUpVote(prop);
+        }}
+        handleSetFavorite={(prop) => {
+          this.handleSetFavorite(prop);
+        }}
         handleAddToCart={(prop) => {
           this.handleAddToCart(prop);
         }}
         handleRemove={(prop) => {
           this.handleRemove(prop);
         }}
-        handleChange={(prop) => {
-          this.handleChange(prop);
+        handleChange={(prop, id) => {
+          this.handleChange(prop, id);
         }}
       />
     );

@@ -15,8 +15,8 @@ function ShoppingCartItem({
   handleRemove,
   subtotal,
 }) {
-  function onHandleChange() {
-    handleChange(quantity, id, price);
+  function onHandleChange(event) {
+    handleChange(event, id);
   }
   function onHandleRemove() {
     handleRemove(id);
@@ -55,7 +55,7 @@ function ShoppingCartItem({
                         value={quantity}
                       >
                         {/* {buildSelectOptions(unitsInStock)} */}
-                        <option value="1,">1</option>
+                        <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
