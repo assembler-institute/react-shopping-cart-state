@@ -84,8 +84,10 @@ class App extends Component {
     const { cartItems } = this.state;
     const updatedItems = cartItems.map((item) => {
       if (item.id === productId && item.quantity <= item.unitsInStock) {
-        // eslint-disable-next-line no-console
-        console.log(Number(event.target.value));
+        return {
+          ...item,
+          quantity: event.target.value,
+        };
       }
 
       return item;
