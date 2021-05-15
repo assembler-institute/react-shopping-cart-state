@@ -32,6 +32,7 @@ class App extends Component {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleSetFavorite = this.handleSetFavorite.bind(this);
+    this.handleUpVote = this.handleUpVote.bind(this);
   }
 
   componentDidMount() {
@@ -78,16 +79,38 @@ class App extends Component {
 
   // handleDownVote(productId) {}
 
-  // handleUpVote(productId) {}
+  handleUpVote(productId) {
+    const { products } = this.state;
+
+    const updatedArr = products.map((pr) => {
+      if (pr.id === productId) {
+        const prMod =
+          pr.votes.upVotes.currentValue < pr.votes.upVotes.upperLimit
+            ? {
+                ...pr,
+                votes: {
+                  ...pr.votes,
+                  upVotes: {
+                    ...pr.votes.upVotes,
+                    currentValue: pr.votes.upVotes.currentValue + 1,
+                  },
+                },
+              }
+            : pr;
+        return prMod;
+      }
+      return pr;
+    });
+
+    this.setState({ products: updatedArr });
+  }
 
   handleSetFavorite(productId) {
-    console.log(this, productId);
     const { products } = this.state;
 
     const updatedArr = products.map((product) => {
-      const { id, isFavorite } = product;
-      if (id === productId) {
-        return { ...product, isFavorite: !isFavorite };
+      if (product.id === productId) {
+        return { ...product, isFavorite: !product.isFavorite };
       }
       return product;
     });
@@ -112,7 +135,7 @@ class App extends Component {
         hasError={hasError}
         loadingError={loadingError}
         handleDownVote={() => {}}
-        handleUpVote={() => {}}
+        handleUpVote={this.handleUpVote}
         handleSetFavorite={this.handleSetFavorite}
         handleAddToCart={this.handleAddToCart}
         handleRemove={this.handleRemove}
