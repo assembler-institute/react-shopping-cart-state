@@ -33,6 +33,7 @@ class App extends Component {
     this.handleRemove = this.handleRemove.bind(this);
     this.handleSetFavorite = this.handleSetFavorite.bind(this);
     this.handleUpVote = this.handleUpVote.bind(this);
+    this.handleDownVote = this.handleDownVote.bind(this);
   }
 
   componentDidMount() {
@@ -77,7 +78,33 @@ class App extends Component {
     this.setState({ cartItems: cartUpdated });
   }
 
-  // handleDownVote(productId) {}
+  handleDownVote(productId) {
+    const { products } = this.state;
+
+    const updatedArr = products.map((pr) => {
+      const {
+        votes: {
+          downVotes: { currentValue, upperLimit },
+        },
+      } = pr;
+
+      if (pr.id === productId && currentValue < upperLimit) {
+        return {
+          ...pr,
+          votes: {
+            ...pr.votes,
+            upVotes: {
+              ...pr.votes.upVotes,
+              currentValue: pr.votes.upVotes.currentValue + 1,
+            },
+          },
+        };
+      }
+      return pr;
+    });
+
+    this.setState({ products: updatedArr });
+  }
 
   handleUpVote(productId) {
     const { products } = this.state;
@@ -134,7 +161,7 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
+        handleDownVote={this.handleDownVote}
         handleUpVote={this.handleUpVote}
         handleSetFavorite={this.handleSetFavorite}
         handleAddToCart={this.handleAddToCart}
