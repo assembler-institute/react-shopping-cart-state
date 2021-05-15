@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from "react";
 
 import Home from "./pages/Home";
@@ -18,6 +19,7 @@ class App extends Component {
 
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleUpVote = this.handleUpVote.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -36,31 +38,30 @@ class App extends Component {
   handleAddToCart(productId) {
     const { cartItems } = this.state;
     const { products } = this.state;
-    const { quantity } = this.state;
     let counter = 0;
 
     products.forEach((prod) => {
       if (prod.id === productId) {
         cartItems.forEach((cItem) => {
           if (cItem.id === productId) {
-            this.setState({
-              quantity: quantity + 1,
-            });
+            if (cItem.quantity !== 10) {
+              cItem.quantity += 1;
+            } else {
+              cItem.quantity = 10;
+            }
           } else {
             counter += 1;
           }
         });
         if (cartItems.length === counter) {
-          prod.quantity += 1;
-          console.log(prod.quantity);
+          prod.quantity = 1;
           cartItems.push(prod);
-          this.setState({
-            cartItems: cartItems,
-          });
         }
       }
     });
-    console.log(quantity);
+    this.setState({
+      cartItems: cartItems,
+    });
   }
 
   handleChange(quantity, productId, price) {

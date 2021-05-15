@@ -13,6 +13,7 @@ function ShoppingCartItem({
   // unitsInStock,
   handleChange,
   handleRemove,
+  subtotal,
 }) {
   function onHandleChange() {
     handleChange(quantity, id, price);
@@ -40,6 +41,9 @@ function ShoppingCartItem({
                   <p>
                     <strong>{price}€</strong>
                   </p>
+                  <p>
+                    <strong>Subtotal: {subtotal}€</strong>
+                  </p>
                 </div>
                 <div className="col mt-auto">
                   <div className="row">
@@ -48,7 +52,7 @@ function ShoppingCartItem({
                         className="custom-select"
                         onChange={onHandleChange}
                         onBlur={onHandleChange}
-                        /* value={quantity} */
+                        value={quantity}
                       >
                         {/* {buildSelectOptions(unitsInStock)} */}
                         <option value="1,">1</option>

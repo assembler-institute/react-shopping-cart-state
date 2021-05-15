@@ -3,9 +3,12 @@ import React from "react";
 import ShoppingCartItem from "../ShoppingCartItem";
 import Button from "../Button";
 
-// function getCartTotal() {
-//   return 0;
-// }
+// eslint-disable-next-line consistent-return
+function getCartTotal(cart) {
+  return cart.reduce((a, b) => {
+    return a + b.price * b.quantity;
+  }, 0);
+}
 
 function Cart({ cartItems, handleRemove, handleChange, ...props }) {
   return (
@@ -28,6 +31,7 @@ function Cart({ cartItems, handleRemove, handleChange, ...props }) {
               unitsInStock={item.unitsInStock}
               handleRemove={handleRemove}
               handleChange={handleChange}
+              subtotal={item.subtotal}
             />
           ))
         ) : (
@@ -41,8 +45,7 @@ function Cart({ cartItems, handleRemove, handleChange, ...props }) {
               <div className="d-flex justify-content-between">
                 <h4 className="h5">Total</h4>
                 <h4>
-                  {/* <strong>{getCartTotal(cartItems)}€</strong> */}
-                  <strong>0€</strong>
+                  <strong>{getCartTotal(cartItems)}€</strong>
                 </h4>
               </div>
               <hr />
