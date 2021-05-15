@@ -4,6 +4,19 @@ import Home from "./pages/Home";
 
 import * as api from "./api";
 
+function newCartComponent(product) {
+  return {
+    id: product.id,
+    title: product.title,
+    img: product.img,
+    price: product.price,
+    unitsInStock: product.unitsInStock,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+    quantity: product.quantity + 1,
+  };
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +28,9 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -30,11 +46,34 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { products, cartItems } = this.state;
+    const index = products.findIndex((v) => v.id === productId);
+    const element = cartItems.find((v) => v.id === productId);
+
+    if (element) {
+      const updatedInfo = cartItems.map((item) => {
+        if (item.id !== productId) return item;
+        if (item.quantity >= item.unitsInStock) return item;
+        return { ...item, quantity: item.quantity + 1 };
+      });
+      this.setState({ cartItems: updatedInfo });
+      return;
+    }
+
+    const updatedProduct = newCartComponent(products[index]);
+    this.setState((prevState) => ({
+      cartItems: [...prevState.cartItems, updatedProduct],
+    }));
+  }
 
   // handleChange(event, productId) {}
 
-  // handleRemove(productId) {}
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const cartUpdated = cartItems.filter((v) => v.id !== productId);
+    this.setState({ cartItems: cartUpdated });
+  }
 
   // handleDownVote(productId) {}
 
@@ -61,8 +100,8 @@ class App extends Component {
         handleDownVote={() => {}}
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
+        handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
         handleChange={() => {}}
       />
     );
