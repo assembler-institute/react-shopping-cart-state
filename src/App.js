@@ -98,18 +98,18 @@ class App extends Component {
     const updatedArr = products.map((pr) => {
       const {
         votes: {
-          downVotes: { currentValue, upperLimit },
+          downVotes: { currentValue, lowerLimit },
         },
       } = pr;
 
-      if (pr.id === productId && currentValue < upperLimit) {
+      if (pr.id === productId && currentValue < lowerLimit) {
         return {
           ...pr,
           votes: {
             ...pr.votes,
-            upVotes: {
-              ...pr.votes.upVotes,
-              currentValue: pr.votes.upVotes.currentValue + 1,
+            downVotes: {
+              ...pr.votes.downVotes,
+              currentValue: pr.votes.downVotes.currentValue + 1,
             },
           },
         };
