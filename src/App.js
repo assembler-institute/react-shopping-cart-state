@@ -49,7 +49,14 @@ class App extends Component {
         products: data,
         isLoading: false,
       });
+
+      localStorage.setItem("App data", JSON.stringify(this.state));
     });
+  }
+
+  componentDidUpdate() {
+    const updatedState = this.state;
+    localStorage.setItem("App data", JSON.stringify(updatedState));
   }
 
   handleAddToCart(productId) {
