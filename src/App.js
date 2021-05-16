@@ -4,20 +4,23 @@ import Home from "./pages/Home";
 
 import * as api from "./api";
 
+const LOCAL_STORAGE_KEY = "items-state";
+
 const addNewItemToCart = (newItem) => {
   if (newItem.quantity >= newItem.unitsInStock) {
     return newItem;
   }
-  return {
+  const newItemObj = {
     id: newItem.id,
     title: newItem.title,
     img: newItem.img,
     price: newItem.price,
     unitsInStock: newItem.unitsInStock,
-    createdAt: newItem.createdAt,
-    updatedAt: newItem.updatedAt,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     quantity: newItem.quantity + 1,
   };
+  return newItemObj;
 };
 
 class App extends Component {
@@ -41,22 +44,32 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      isLoading: true,
-    });
-
-    api.getProducts().then((data) => {
+    const localCart = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (!localCart) {
       this.setState({
-        products: data,
-        isLoading: false,
+        isLoading: true,
       });
+
+      api.getProducts().then((data) => {
+        this.setState({
+          products: data,
+          isLoading: false,
+        });
+      });
+      return;
+    }
+    this.setState({
+      cartItems: localCart.cartItems,
+      products: localCart.products,
     });
   }
 
   componentDidUpdate() {
     const { cartItems, products } = this.state;
-
-    localStorage.setItem("cart", JSON.stringify({ cartItems, products }));
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify({ cartItems, products }),
+    );
   }
 
   handleAddToCart(productId) {
