@@ -44,8 +44,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const localCart = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (!localCart) {
+    const localItems = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (!localItems) {
       this.setState({
         isLoading: true,
       });
@@ -59,8 +59,8 @@ class App extends Component {
       return;
     }
     this.setState({
-      cartItems: localCart.cartItems,
-      products: localCart.products,
+      cartItems: localItems.cartItems,
+      products: localItems.products,
     });
   }
 
