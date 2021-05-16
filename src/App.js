@@ -34,6 +34,8 @@ class App extends Component {
     this.handleAddToCart = this.handleAddToCart.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleDownVote = this.handleDownVote.bind(this);
+    this.handleUpVote = this.handleUpVote.bind(this);
     this.handleSetFavorite = this.handleSetFavorite.bind(this);
   }
 
@@ -103,17 +105,61 @@ class App extends Component {
     const indextToRemove = cartItems.indexOf(itemToRemove);
 
     cartItems.splice(indextToRemove, 1);
-    // eslint-disable-next-line no-console
-    // console.log(itemToRemove);
 
     this.setState({
       cartItems: cartItems,
     });
   }
 
-  // handleDownVote(productId) {}
+  handleDownVote(productId) {
+    const { products } = this.state;
+    // eslint-disable-next-line no-console
+    console.log(products);
+    const updatedProducts = products.map((product) => {
+      if (
+        product.id === productId &&
+        product.votes.downVotes.currentValue <
+          product.votes.downVotes.lowerLimit
+      ) {
+        // eslint-disable-next-line no-console
+        console.log(product);
+        return {
+          ...product,
+          votes: {
+            ...product.votes,
+            downVotes: {
+              ...product.votes.downVotes,
+              currentValue: product.votes.downVotes.currentValue + 1,
+            },
+          },
+        };
+      }
+      return product;
+    });
 
-  // handleUpVote(productId) {}
+    this.setState({ products: updatedProducts });
+  }
+
+  handleUpVote(productId) {
+    const { products } = this.state;
+    const updatedProducts = products.map((product) => {
+      if (product.id === productId) {
+        return {
+          ...product,
+          votes: {
+            ...product.votes,
+            upVotes: {
+              ...product.votes.upVotes,
+              currentValue: product.votes.upVotes.currentValue + 1,
+            },
+          },
+        };
+      }
+      return product;
+    });
+
+    this.setState({ products: updatedProducts });
+  }
 
   handleSetFavorite(productId) {
     const { products } = this.state;
@@ -147,8 +193,8 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={() => {}}
+        handleDownVote={this.handleDownVote}
+        handleUpVote={this.handleUpVote}
         handleSetFavorite={this.handleSetFavorite}
         handleAddToCart={this.handleAddToCart}
         handleRemove={this.handleRemove}
