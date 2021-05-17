@@ -4,18 +4,31 @@ import "./ShoppingCartItem.scss";
 
 import Button from "../Button";
 
+function buildSelectOptions(unitsInStock) {
+  return Array.from({ length: unitsInStock }, (_value, index) => {
+    const currentIndex = index + 1;
+    return (
+      <option key={index} value={currentIndex}>
+        {currentIndex}
+      </option>
+    );
+  });
+}
+
 function ShoppingCartItem({
-  // id,
+  id,
   img,
   title,
   price,
   quantity,
-  // unitsInStock,
+  unitsInStock,
   // handleChange,
-  // handleRemove,
+  handleRemove,
 }) {
   function onHandleChange() {}
-  function onHandleRemove() {}
+  function onHandleRemove() {
+    handleRemove(id);
+  }
 
   return (
     <div className="col">
@@ -46,8 +59,8 @@ function ShoppingCartItem({
                         onBlur={onHandleChange}
                         value={quantity}
                       >
-                        {/* {buildSelectOptions(unitsInStock)} */}
-                        <option value="1,">1</option>
+                        {buildSelectOptions(unitsInStock)}
+                        {/* <option value="1,">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
@@ -56,7 +69,7 @@ function ShoppingCartItem({
                         <option value="7">7</option>
                         <option value="8">8</option>
                         <option value="9">9</option>
-                        <option value="10">10</option>
+                        <option value="10">10</option> */}
                       </select>
                     </div>
                     <div className="col col-6 col-lg-8">
