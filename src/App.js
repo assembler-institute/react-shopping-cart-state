@@ -50,7 +50,9 @@ class App extends Component {
         isLoading: false,
       });
 
-      localStorage.setItem("App data", JSON.stringify(this.state));
+      if (!localStorage.getItem("App data")) {
+        localStorage.setItem("App data", JSON.stringify(this.state));
+      }
     });
   }
 
