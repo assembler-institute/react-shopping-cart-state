@@ -34,6 +34,7 @@ class App extends Component {
     this.handleSetFavorite = this.handleSetFavorite.bind(this);
     this.handleUpVote = this.handleUpVote.bind(this);
     this.handleDownVote = this.handleDownVote.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -84,7 +85,22 @@ class App extends Component {
     }));
   }
 
-  // handleChange(event, productId) {}
+  handleChange(event, productId) {
+    const { cartItems } = this.state;
+    const value = event.target.value;
+
+    const arr = cartItems.map((el) => {
+      if (el.id === productId) {
+        console.log(value);
+        return {
+          ...el,
+          quantity: value,
+        };
+      }
+      return el;
+    });
+    this.setState({ cartItems: arr });
+  }
 
   handleRemove(productId) {
     const { cartItems } = this.state;
@@ -178,7 +194,7 @@ class App extends Component {
         handleSetFavorite={this.handleSetFavorite}
         handleAddToCart={this.handleAddToCart}
         handleRemove={this.handleRemove}
-        handleChange={() => {}}
+        handleChange={this.handleChange}
       />
     );
   }

@@ -22,10 +22,12 @@ function ShoppingCartItem({
   price,
   quantity,
   unitsInStock,
-  // handleChange,
+  handleChange,
   handleRemove,
 }) {
-  function onHandleChange() {}
+  function onHandleChange(event) {
+    handleChange(event, id);
+  }
   function onHandleRemove() {
     handleRemove(id);
   }
