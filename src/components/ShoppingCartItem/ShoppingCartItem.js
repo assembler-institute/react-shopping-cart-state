@@ -5,17 +5,22 @@ import "./ShoppingCartItem.scss";
 import Button from "../Button";
 
 function ShoppingCartItem({
-  // id,
+  id,
   img,
   title,
   price,
   quantity,
   // unitsInStock,
-  // handleChange,
-  // handleRemove,
+  handleChange,
+  handleRemove,
+  subtotal,
 }) {
-  function onHandleChange() {}
-  function onHandleRemove() {}
+  function onHandleChange(event) {
+    handleChange(event, id);
+  }
+  function onHandleRemove() {
+    handleRemove(id);
+  }
 
   return (
     <div className="col">
@@ -36,6 +41,9 @@ function ShoppingCartItem({
                   <p>
                     <strong>{price}€</strong>
                   </p>
+                  <p>
+                    <strong>Subtotal: {subtotal}€</strong>
+                  </p>
                 </div>
                 <div className="col mt-auto">
                   <div className="row">
@@ -47,7 +55,7 @@ function ShoppingCartItem({
                         value={quantity}
                       >
                         {/* {buildSelectOptions(unitsInStock)} */}
-                        <option value="1,">1</option>
+                        <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import React, { Component } from "react";
 
 import Home from "./pages/Home";
@@ -15,6 +16,13 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleUpVote = this.handleUpVote.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleDownVote = this.handleDownVote.bind(this);
+    this.handleSetFavorite = this.handleSetFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -30,17 +38,101 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { cartItems } = this.state;
+    const { products } = this.state;
+    let counter = 0;
 
-  // handleChange(event, productId) {}
+    products.forEach((prod) => {
+      if (prod.id === productId) {
+        cartItems.forEach((cItem) => {
+          if (cItem.id === productId) {
+            // Limit quantity to 10 -->
+            /* if (cItem.quantity !== 10) {
+              cItem.quantity += 1;
+            } else {
+              cItem.quantity = 10;
+            } */
 
-  // handleRemove(productId) {}
+            cItem.quantity += 1;
+            cItem.subtotal = cItem.price * cItem.quantity;
+          } else {
+            counter += 1;
+          }
+        });
+        if (cartItems.length === counter) {
+          prod.quantity = 1;
+          prod.subtotal = prod.price;
+          cartItems.push(prod);
+        }
+      }
+    });
+    this.setState({
+      cartItems: cartItems,
+    });
+  }
 
-  // handleDownVote(productId) {}
+  handleChange(event, productId) {
+    const { cartItems } = this.state;
 
-  // handleUpVote(productId) {}
+    const toCount = cartItems.find((product) => product.id === productId);
 
-  // handleSetFavorite(productId) {}
+    toCount.quantity = parseInt(event.target.value, 10);
+
+    toCount.subtotal = toCount.price * toCount.quantity;
+
+    this.setState({
+      cartItems: cartItems,
+    });
+  }
+
+  handleRemove(productId) {
+    let { cartItems } = this.state;
+
+    const toRemove = cartItems.filter((item) => item.id !== productId);
+
+    cartItems = toRemove;
+    this.setState({
+      cartItems: cartItems,
+    });
+  }
+
+  handleDownVote(productId) {
+    const { products } = this.state;
+    const downVoted = products.find((product) => product.id === productId);
+
+    downVoted.votes.downVotes.currentValue += 1;
+
+    this.setState({
+      products: products,
+    });
+  }
+
+  handleUpVote(productId) {
+    const { products } = this.state;
+    const upVoted = products.find((product) => product.id === productId);
+
+    upVoted.votes.upVotes.currentValue += 1;
+
+    this.setState({
+      products: products,
+    });
+  }
+
+  handleSetFavorite(productId) {
+    const { products } = this.state;
+    const favorited = products.find((product) => product.id === productId);
+
+    if (favorited.isFavorite) {
+      favorited.isFavorite = false;
+    } else {
+      favorited.isFavorite = true;
+    }
+
+    this.setState({
+      products: products,
+    });
+  }
 
   render() {
     const {
@@ -58,12 +150,24 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
+        handleDownVote={(prop) => {
+          this.handleDownVote(prop);
+        }}
+        handleUpVote={(prop) => {
+          this.handleUpVote(prop);
+        }}
+        handleSetFavorite={(prop) => {
+          this.handleSetFavorite(prop);
+        }}
+        handleAddToCart={(prop) => {
+          this.handleAddToCart(prop);
+        }}
+        handleRemove={(prop) => {
+          this.handleRemove(prop);
+        }}
+        handleChange={(prop, id) => {
+          this.handleChange(prop, id);
+        }}
       />
     );
   }
