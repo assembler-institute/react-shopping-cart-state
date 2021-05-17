@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 
 import * as api from "./api";
 
-function newCartComponent(product) {
+function newCartComponent(product = {}) {
   return {
     id: product.id,
     title: product.title,
