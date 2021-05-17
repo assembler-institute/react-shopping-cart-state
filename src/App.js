@@ -15,6 +15,11 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleSetFavorite = this.handleSetFavorite.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -30,17 +35,85 @@ class App extends Component {
     });
   }
 
-  handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { products, cartItems } = this.state;
 
-  // handleChange(event, productId) {}
+    const itemInCart = cartItems.find((item) => item.id === productId);
+    const productRef = products.find((item) => item.id === productId);
 
-  // handleRemove(productId) {}
+    if (itemInCart) {
+      const updatedCartItems = cartItems.map((item) => {
+        if (item.id !== productId) {
+          return item;
+        }
+
+        if (item.quantity >= item.unitsInStock) {
+          return item;
+        }
+
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      });
+
+      this.setState({ cartItems: updatedCartItems });
+      return;
+    }
+
+    if (!itemInCart) {
+      cartItems.push({
+        id: productRef.id,
+        title: productRef.title,
+        img: productRef.img,
+        price: productRef.price,
+        unitsInStock: productRef.unitsInStock,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        quantity: 1,
+      });
+      this.setState({
+        cartItems: cartItems,
+      });
+    }
+  }
+
+  handleChange(event, productId) {
+    const { cartItems } = this.state;
+
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.id === productId && item.quantity <= item.unitsInStock) {
+        return {
+          ...item,
+          quatity: Number(event.target.value),
+        };
+      }
+      return item;
+    });
+    this.setState({ cartItems: updatedCartItems });
+  }
+
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const itemInCart = cartItems.filter((item) => item.id !== productId);
+
+    this.setState({ cartItems: itemInCart });
+  }
 
   // handleDownVote(productId) {}
 
   // handleUpVote(productId) {}
 
-  // handleSetFavorite(productId) {}
+  handleSetFavorite(productId) {
+    const { products } = this.state;
+    const setFavoriteProduct = products.map((product) => {
+      if (product.id === productId) {
+        return { ...product, isFavorite: !product.isFavorite };
+      }
+      return product;
+    });
+    this.setState({ products: setFavoriteProduct });
+  }
 
   render() {
     const {
@@ -60,10 +133,10 @@ class App extends Component {
         loadingError={loadingError}
         handleDownVote={() => {}}
         handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
+        handleSetFavorite={this.handleSetFavorite}
+        handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
+        handleChange={this.handleChange}
       />
     );
   }
