@@ -7,7 +7,7 @@ module.exports = {
   },
   extends: [
     "airbnb",
-    "eslint:recommended",
+    // "eslint:recommended",
     "plugin:react/recommended",
     "plugin:jest/recommended",
     "plugin:import/errors",
@@ -59,5 +59,12 @@ module.exports = {
     "no-underscore-dangle": "off",
     "react/forbid-prop-types": "off",
     "react/prop-types": "off",
+    // eslint-disable-next-line no-dupe-keys
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };
