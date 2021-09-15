@@ -5,68 +5,106 @@ import Home from "./pages/Home";
 import * as api from "./api";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
-      products: [],
-      cartItems: [],
-      isLoading: false,
-      hasError: false,
-      loadingError: null,
-    };
-  }
+		this.state = {
+			products: [],
+			cartItems: [],
+			isLoading: false,
+			hasError: false,
+			loadingError: null,
+		};
 
-  componentDidMount() {
-    this.setState({
-      isLoading: true,
-    });
+		this.handleAddToCart = this.handleAddToCart.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleRemove = this.handleRemove.bind(this);
+		this.handleDownVote = this.handleDownVote.bind(this);
+		this.handleUpVote = this.handleUpVote.bind(this);
+		this.handleSetFavorite = this.handleSetFavorite.bind(this);
+	}
 
-    api.getProducts().then((data) => {
-      this.setState({
-        products: data,
-        isLoading: false,
-      });
-    });
-  }
+	componentDidMount() {
+		this.setState({
+			isLoading: true,
+		});
 
-  // handleAddToCart(productId) {}
+		api.getProducts().then((data) => {
+			this.setState({
+				products: data,
+				isLoading: false,
+			});
+		});
+	}
 
-  // handleChange(event, productId) {}
+	handleAddToCart(productId) {
+		const { products, cartItems } = this.state;
 
-  // handleRemove(productId) {}
+		const index = cartItems.findIndex((product) => product.id === productId);
 
-  // handleDownVote(productId) {}
+		if (index > -1) {
+			cartItems[index].quantity < cartItems[index].unitsInStock && cartItems[index].quantity++;
+		} else {
+			const product = products.find((product) => product.id === productId);
 
-  // handleUpVote(productId) {}
+			cartItems.push({
+				...product,
+				quantity: 1,
+			});
+		}
 
-  // handleSetFavorite(productId) {}
+		this.setState({ cartItems });
+	}
 
-  render() {
-    const {
-      cartItems,
-      products,
-      isLoading,
-      hasError,
-      loadingError,
-    } = this.state;
+	handleChange(event, productId) {
+		const { cartItems } = this.state;
+		const productIndex = cartItems.findIndex((product) => product.id === productId);
 
-    return (
-      <Home
-        cartItems={cartItems}
-        products={products}
-        isLoading={isLoading}
-        hasError={hasError}
-        loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
-      />
-    );
-  }
+		if (productIndex !== -1) {
+			cartItems[productIndex].quantity = event.target.value;
+		}
+
+		this.setState({ cartItems });
+	}
+
+	handleRemove(productId) {
+		const cartItems = this.state.cartItems.filter((product) => product.id !== productId);
+
+		this.setState({ cartItems });
+	}
+
+	handleDownVote(productId) {
+		const { products } = this.state;
+		const productIndex = products.findIndex((product) => product.id === productId);
+
+		products[productIndex].votes.downVotes.currentValue < products[productIndex].votes.downVotes.lowerLimit && products[productIndex].votes.downVotes.currentValue++;
+
+		this.setState({ products });
+	}
+
+	handleUpVote(productId) {
+		const { products } = this.state;
+		const productIndex = products.findIndex((product) => product.id === productId);
+
+		products[productIndex].votes.upVotes.currentValue < products[productIndex].votes.upVotes.upperLimit && products[productIndex].votes.upVotes.currentValue++;
+
+		this.setState({ products });
+	}
+
+	handleSetFavorite(productId) {
+		const { products } = this.state;
+		const productIndex = products.findIndex((product) => product.id === productId);
+
+		products[productIndex].isFavorite = !products[productIndex].isFavorite;
+
+		this.setState({ products });
+	}
+
+	render() {
+		const { cartItems, products, isLoading, hasError, loadingError } = this.state;
+
+		return <Home cartItems={cartItems} products={products} isLoading={isLoading} hasError={hasError} loadingError={loadingError} handleDownVote={this.handleDownVote} handleUpVote={this.handleUpVote} handleSetFavorite={this.handleSetFavorite} handleAddToCart={this.handleAddToCart} handleRemove={this.handleRemove} handleChange={this.handleChange} />;
+	}
 }
 
 export default App;
