@@ -15,6 +15,8 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
   }
 
   componentDidMount() {
@@ -30,7 +32,43 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { cartItems, products } = this.state;
+    const prevCartState = cartItems.find(
+      (cartItem) => productId === cartItem.id,
+    );
+
+    const notFoundInCart = cartItems.find(
+      (cartItem) => productId !== cartItem.id,
+    );
+
+    if (prevCartState) {
+      const nextCartState = cartItems.map((cartItem) => {
+        if (productId !== cartItem.id) {
+          return cartItem;
+        }
+
+        return { ...cartItem, quantity: cartItem.quantity + 1 };
+      });
+    }
+    if (notFoundInCart) {
+      const newCartState = products.map((product) => {
+        if (product.id === productId) {
+          cartItems.push({
+            id: product.id,
+            title: product.title,
+            img: product.img,
+            price: product.price,
+            unitsInStock: product.unitsInStock,
+            createdAt: product.createdAt,
+            updatedAt: product.updatedAt,
+            quantity: 1,
+          });
+        }
+        return cartItems;
+      });
+    }
+  }
 
   // handleChange(event, productId) {}
 

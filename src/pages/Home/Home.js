@@ -39,12 +39,12 @@ function Home({
 
               {isLoading && <p>Loading products...</p>}
               {hasError && (
-                <div>
+                <>
                   <h2>Something went wrong...</h2>
                   <pre>
                     <code>{loadingError}</code>
                   </pre>
-                </div>
+                </>
               )}
               {!isLoading && !hasError && (
                 <div className="col col-12">
