@@ -17,6 +17,7 @@ class App extends Component {
     };
 
     this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -46,11 +47,11 @@ class App extends Component {
         if (cartItem.quantity >= cartItem.unitsInStock) {
           return cartItem;
         }
-        console.log(cartItems);
 
         return { ...cartItem, quantity: cartItem.quantity + 1 };
       });
       this.setState({ cartItems: nextCartState });
+
       return;
     }
 
@@ -73,7 +74,12 @@ class App extends Component {
 
   // handleChange(event, productId) {}
 
-  // handleRemove(productId) {}
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const afterDeletedItem = cartItems.filter((item) => item.id !== productId);
+
+    this.setState({ cartItems: afterDeletedItem });
+  }
 
   // handleDownVote(productId) {}
 
@@ -101,7 +107,7 @@ class App extends Component {
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
         handleAddToCart={this.handleAddToCart}
-        handleRemove={() => {}}
+        handleRemove={this.handleRemove}
         handleChange={() => {}}
       />
     );
