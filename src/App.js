@@ -4,6 +4,38 @@ import Home from "./pages/Home";
 
 import * as api from "./api";
 
+const LOCAL_STORAGE_KEY = "react-sc-state";
+
+function loadLocalStorageData() {
+  const prevItems = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+  if (!prevItems) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(prevItems);
+  } catch (error) {
+    return null;
+  }
+}
+
+function buildNewCartItem(cartItem) {
+  if (cartItem.quantity >= cartItem.unitsInStock) {
+    return cartItem;
+  }
+
+  return {
+    id: cartItem.id,
+    title: cartItem.title,
+    img: cartItem.img,
+    price: cartItem.price,
+    unitsInStock: cartItem.unitsInStock,
+    createdAt: cartItem.createdAt,
+    updatedAt: cartItem.updatedAt,
+    quantity: cartItem.quantity + 1,
+  };
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +50,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({
+    const prevItems = loadLocalStorageData();
+
+    if(!prevItems){
+      this.setState({
       isLoading: true,
     });
 
@@ -28,19 +63,139 @@ class App extends Component {
         isLoading: false,
       });
     });
+    return;
+  }
+    this.setState({
+      cartItems: prevItems.cartItems,
+      products: prevItems.products,
+    });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { cartItems, products } = this.State;
 
-  // handleChange(event, productId) {}
+    const prevCartItem = cartItems.find((item) => item.id === productId);
+    const foundProduct = products.find((product) => product.id === productId);
 
-  // handleRemove(productId) {}
+    if (prevCartItem) {
+      const updatedCartItems = cartItems.map((item) => {
+        if (item.id !== productId) {
+          return item;
+        }
 
-  // handleDownVote(productId) {}
+        if (item.quantity >= item.unitsInStock) {
+          return item;
+        }
 
-  // handleUpVote(productId) {}
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      });
 
-  // handleSetFavorite(productId) {}
+      this.setState({ cartItems: updatedCartItems });
+      return;
+    }
+
+    const updatedProduct = buildNewCartItem(foundProduct);
+    this.setState((prevState) => ({
+      cartItems: [...prevState.cartItems, updatedProduct],
+    }));
+  }
+
+  handleChange(event, productId) {
+    const { cartItems } = this.state;
+
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.id === productId && item.quantity <= item.unitsInStock) {
+        return {
+          ...item,
+          quantity: Number(event.target.value),
+        };
+      }
+
+      return item;
+    });
+
+    this.setState({ cartItems: updatedCartItems });
+  }
+
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const updatedCartItems = cartItems.filter((item) => item.id !== productId);
+
+    this.setState({
+      cartItems: updatedCartItems,
+    }); 
+  }
+
+  handleDownVote(productId){
+    const { products } = this.state;
+
+    const updatedProducts = products.map((product) => {
+      if (
+        product.id === productId &&
+        product.votes.downVotes.currentValue <
+          product.votes.downVotes.lowerLimit
+      ) {
+        return {
+          ...product,
+          votes: {
+            ...product.votes,
+            downVotes: {
+              ...product.votes.downVotes,
+              currentValue: product.votes.downVotes.currentValue + 1,
+            },
+          },
+        };
+      }
+
+      return product;
+    });
+
+    this.setState({ products: updatedProducts });
+  }
+
+  handleUpVote(productId) {
+    const { products } = this.state;
+
+    const updatedProducts = products.map((product) => {
+      if (
+        product.id === productId &&
+        product.votes.upVotes.currentValue < product.votes.upVotes.upperLimit
+      ) 
+        return {
+          ...product,
+          votes: {
+            ...product.votes,
+            upVotes: {
+              ...product.votes.upVotes,
+              currentValue: product.votes.upVotes.currentValue + 1,
+            },
+          },
+        };
+      return product;
+    });
+
+    this.setState({ products: updatedProducts });
+  }
+
+  handleSetFavorite(productId) {
+    const { products } = this.state;
+
+    const updatedProducts = products.map((product) => {
+      if (product.id === productId) {
+        return {
+          ...product,
+          isFavorite: !product.isFavorite,
+        };
+      }
+
+      return product;
+    });
+
+    this.setState({ products: updatedProducts });
+  }
 
   render() {
     const {
@@ -58,12 +213,12 @@ class App extends Component {
         isLoading={isLoading}
         hasError={hasError}
         loadingError={loadingError}
-        handleDownVote={() => {}}
-        handleUpVote={() => {}}
-        handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
-        handleChange={() => {}}
+        handleDownVote={this.handleDownVote}
+        handleUpVote={this.handleUpVote}
+        handleSetFavorite={this.handleSetFavorite}
+        handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
+        handleChange={this.handleChange}
       />
     );
   }
