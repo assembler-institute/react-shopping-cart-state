@@ -34,40 +34,41 @@ class App extends Component {
 
   handleAddToCart(productId) {
     const { cartItems, products } = this.state;
-    const prevCartState = cartItems.find(
+    const prevCartItem = cartItems.find(
       (cartItem) => productId === cartItem.id,
     );
-
-    const notFoundInCart = cartItems.find(
-      (cartItem) => productId !== cartItem.id,
-    );
-
-    if (prevCartState) {
+    const newCartProduct = products.find((product) => product.id === productId);
+    if (prevCartItem) {
       const nextCartState = cartItems.map((cartItem) => {
         if (productId !== cartItem.id) {
           return cartItem;
         }
+        if (cartItem.quantity >= cartItem.unitsInStock) {
+          return cartItem;
+        }
+        console.log(cartItems);
 
         return { ...cartItem, quantity: cartItem.quantity + 1 };
       });
+      this.setState({ cartItems: nextCartState });
+      return;
     }
-    if (notFoundInCart) {
-      const newCartState = products.map((product) => {
-        if (product.id === productId) {
-          cartItems.push({
-            id: product.id,
-            title: product.title,
-            img: product.img,
-            price: product.price,
-            unitsInStock: product.unitsInStock,
-            createdAt: product.createdAt,
-            updatedAt: product.updatedAt,
-            quantity: 1,
-          });
-        }
-        return cartItems;
-      });
-    }
+
+    this.setState((prevState) => ({
+      cartItems: [
+        ...prevState.cartItems,
+        {
+          id: newCartProduct.id,
+          title: newCartProduct.title,
+          img: newCartProduct.img,
+          price: newCartProduct.price,
+          unitsInStock: newCartProduct.unitsInStock,
+          createdAt: newCartProduct.createdAt,
+          updatedAt: newCartProduct.updatedAt,
+          quantity: newCartProduct.quantity + 1,
+        },
+      ],
+    }));
   }
 
   // handleChange(event, productId) {}
@@ -99,7 +100,7 @@ class App extends Component {
         handleDownVote={() => {}}
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
+        handleAddToCart={this.handleAddToCart}
         handleRemove={() => {}}
         handleChange={() => {}}
       />
