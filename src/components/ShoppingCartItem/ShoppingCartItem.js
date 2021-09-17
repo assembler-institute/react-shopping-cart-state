@@ -5,17 +5,19 @@ import "./ShoppingCartItem.scss";
 import Button from "../Button";
 
 function ShoppingCartItem({
-  // id,
+  id,
   img,
   title,
   price,
   quantity,
   // unitsInStock,
   // handleChange,
-  // handleRemove,
+  handleRemove,
 }) {
   function onHandleChange() {}
-  function onHandleRemove() {}
+  function onHandleRemove() {
+    handleRemove(id);
+  }
 
   return (
     <div className="col">

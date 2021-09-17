@@ -15,6 +15,9 @@ class App extends Component {
       hasError: false,
       loadingError: null,
     };
+
+    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -30,11 +33,53 @@ class App extends Component {
     });
   }
 
-  // handleAddToCart(productId) {}
+  handleAddToCart(productId) {
+    const { cartItems, products } = this.state;
+    const prevCartItem = cartItems.find(
+      (cartItem) => productId === cartItem.id,
+    );
+    const newCartProduct = products.find((product) => product.id === productId);
+    if (prevCartItem) {
+      const nextCartState = cartItems.map((cartItem) => {
+        if (productId !== cartItem.id) {
+          return cartItem;
+        }
+        if (cartItem.quantity >= cartItem.unitsInStock) {
+          return cartItem;
+        }
+
+        return { ...cartItem, quantity: cartItem.quantity + 1 };
+      });
+      this.setState({ cartItems: nextCartState });
+
+      return;
+    }
+
+    this.setState((prevState) => ({
+      cartItems: [
+        ...prevState.cartItems,
+        {
+          id: newCartProduct.id,
+          title: newCartProduct.title,
+          img: newCartProduct.img,
+          price: newCartProduct.price,
+          unitsInStock: newCartProduct.unitsInStock,
+          createdAt: newCartProduct.createdAt,
+          updatedAt: newCartProduct.updatedAt,
+          quantity: newCartProduct.quantity + 1,
+        },
+      ],
+    }));
+  }
 
   // handleChange(event, productId) {}
 
-  // handleRemove(productId) {}
+  handleRemove(productId) {
+    const { cartItems } = this.state;
+    const afterDeletedItem = cartItems.filter((item) => item.id !== productId);
+
+    this.setState({ cartItems: afterDeletedItem });
+  }
 
   // handleDownVote(productId) {}
 
@@ -61,8 +106,8 @@ class App extends Component {
         handleDownVote={() => {}}
         handleUpVote={() => {}}
         handleSetFavorite={() => {}}
-        handleAddToCart={() => {}}
-        handleRemove={() => {}}
+        handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
         handleChange={() => {}}
       />
     );
