@@ -33,7 +33,9 @@ class App extends Component {
       loadingError: null,
     };
 
-    this.handleAddToCart = this.handleAddToCart.bind(this);
+    this.handleAddToCart = this.handleAddToCart.bind(this)
+    this.handleRemove = this.handleRemove.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentDidMount() {
@@ -69,7 +71,6 @@ class App extends Component {
 
     const prevCartItem = cartItems.find((item) => item.id === productId);
     const foundProduct = products.find((product) => product.id === productId);
-    console.log(foundProduct);
 
     if (prevCartItem) {
       const updatedCartItems = cartItems.map((item) => {
@@ -90,6 +91,34 @@ class App extends Component {
     }));
   }
 
+  handleRemove(productId) {
+    const { cartItems } = this.state
+    const updatedItems = cartItems.filter(item => item.id !== productId)
+
+    this.setState({cartItems: updatedItems})
+  }
+
+  handleChange(event, productId) {
+    const { cartItems } = this.state
+    const updatedItems = cartItems.map(item => {
+      if(item.id === productId && item.quantity <= item.unitsInStock) {
+        return {
+          ...item,
+          quantity: Number(event.target.value)
+        }
+      }
+      return item
+    })
+
+    this.setState({ cartItems: updatedItems })
+  }
+
+  // handleDownVote(productId) {}
+
+  // handleUpVote(productId) {}
+
+  // handleSetFavorite(productId) {}
+
   render() {
     const {
       cartItems,
@@ -107,6 +136,12 @@ class App extends Component {
         hasError={hasError}
         loadingError={loadingError}
         handleAddToCart={this.handleAddToCart}
+        handleRemove={this.handleRemove}
+        handleChange= {this.handleChange}
+        handleDownVote={() => {}}
+        handleUpVote={() => {}}
+        handleSetFavorite={()=> {}}
+
       />
     );
   }
